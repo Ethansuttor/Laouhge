@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 
 const navLinks = [
   { label: "About", href: "#about" },
+  { label: "Education", href: "#education" },
+  { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
@@ -27,7 +29,7 @@ export default function Navbar() {
     >
       <nav className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" className="text-gray-50 font-semibold text-lg tracking-tight">
-          YourName<span className="text-indigo-500">.</span>
+          Ethan<span className="text-indigo-500">.</span>
         </a>
 
         {/* Desktop links */}
