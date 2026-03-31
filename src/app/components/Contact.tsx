@@ -3,8 +3,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
+const EMAIL = "ethan.suttor@louisville.edu";
+
 export default function Contact() {
   const [status, setStatus] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(EMAIL).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,7 +115,29 @@ export default function Contact() {
           </a>
         </div>
 
-        <p className="text-gray-600 text-xs font-mono mt-14">
+        {/* Copy email */}
+        <button
+          onClick={copyEmail}
+          className="flex items-center gap-2 mx-auto mb-10 text-gray-500 hover:text-indigo-400 text-xs font-mono transition-colors group"
+        >
+          {copied ? (
+            <>
+              <svg className="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-indigo-400">Copied!</span>
+            </>
+          ) : (
+            <>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              {EMAIL}
+            </>
+          )}
+        </button>
+
+        <p className="text-gray-600 text-xs font-mono">
           Designed & Built by Ethan Suttor
         </p>
       </motion.div>
