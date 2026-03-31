@@ -1,9 +1,35 @@
 import type { Metadata } from "next";
+import { siteConfig } from "./data/content";
+import ScrollProgressBar from "./components/ScrollProgressBar";
+import BackToTopButton from "./components/BackToTopButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Your Name | Engineering Student",
-  description: "Personal portfolio of an engineering student — projects, skills, and contact.",
+  metadataBase: new URL(siteConfig.url),
+  title: siteConfig.title,
+  description: siteConfig.description,
+  authors: [{ name: siteConfig.name }],
+  keywords: [
+    "engineering student",
+    "portfolio",
+    "computer engineering",
+    "software engineer",
+    "embedded systems",
+    siteConfig.name,
+  ],
+  openGraph: {
+    type: "website",
+    url: siteConfig.url,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -13,7 +39,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ScrollProgressBar />
+        {children}
+        <BackToTopButton />
+      </body>
     </html>
   );
 }

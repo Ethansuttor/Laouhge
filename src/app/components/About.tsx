@@ -1,32 +1,52 @@
+"use client";
+
+import { about, sectionNumbers } from "../data/content";
+import { useScrollReveal } from "../hooks/useScrollReveal";
+
+function renderBold(text: string) {
+  const parts = text.split(/\*\*(.*?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <span key={i} className="text-gray-200">
+        {part}
+      </span>
+    ) : (
+      part
+    )
+  );
+}
+
 export default function About() {
+  const headerRef = useScrollReveal<HTMLHeadingElement>();
+  const textRef = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
+  const photoRef = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
+
   return (
     <section id="about" className="py-24 px-6">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-gray-50 mb-12 flex items-center gap-4">
-          <span className="text-indigo-500 font-mono text-xl">01.</span>
+        <h2
+          ref={headerRef}
+          className="reveal text-3xl font-bold text-gray-50 mb-12 flex items-center gap-4"
+        >
+          <span className="text-indigo-500 font-mono text-xl">
+            {sectionNumbers.about}.
+          </span>
           About Me
           <span className="flex-1 h-px bg-gray-800 ml-4" />
         </h2>
 
         <div className="grid md:grid-cols-3 gap-12 items-start">
           {/* Text */}
-          <div className="md:col-span-2 space-y-4 text-gray-400 leading-relaxed">
-            <p>
-              Hey! I&apos;m a Computer Engineering student at <span className="text-gray-200">Your University</span>,
-              currently in my <span className="text-gray-200">3rd year</span>. I love working at the intersection
-              of hardware and software — from writing firmware for microcontrollers to building
-              full-stack web apps.
-            </p>
-            <p>
-              Outside of class, I spend my time contributing to open-source projects, competing in
-              hackathons, and tinkering with electronics. I&apos;m always looking for new problems to
-              solve and new things to learn.
-            </p>
-            <p>
-              Here are a few technologies I&apos;ve been working with recently:
-            </p>
+          <div
+            ref={textRef}
+            className="reveal md:col-span-2 space-y-4 text-gray-400 leading-relaxed"
+          >
+            {about.paragraphs.map((p, i) => (
+              <p key={i}>{renderBold(p)}</p>
+            ))}
+            <p>Here are a few technologies I&apos;ve been working with recently:</p>
             <ul className="grid grid-cols-2 gap-2 text-sm font-mono text-indigo-400 mt-2">
-              {["Python", "C/C++", "TypeScript", "React", "Next.js", "Linux"].map((tech) => (
+              {about.featuredSkills.map((tech) => (
                 <li key={tech} className="flex items-center gap-2">
                   <span className="text-indigo-500">▹</span> {tech}
                 </li>
@@ -34,11 +54,14 @@ export default function About() {
             </ul>
           </div>
 
-          {/* Photo placeholder */}
-          <div className="flex justify-center md:justify-end">
+          {/* Photo */}
+          <div
+            ref={photoRef}
+            className="reveal flex justify-center md:justify-end order-first md:order-last"
+          >
             <div className="relative w-48 h-48 group">
               <div className="absolute inset-0 border-2 border-indigo-500 rounded translate-x-3 translate-y-3 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-200" />
-              <div className="relative w-48 h-48 bg-gray-800 rounded flex items-center justify-center text-gray-600 text-sm font-mono">
+              <div className="relative w-48 h-48 bg-gray-800 rounded flex items-center justify-center text-gray-600 text-sm font-mono select-none">
                 your photo
               </div>
             </div>
