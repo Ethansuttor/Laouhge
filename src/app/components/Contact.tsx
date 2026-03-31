@@ -1,96 +1,79 @@
 "use client";
 
-import { siteConfig, sectionNumbers } from "../data/content";
-import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Contact() {
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const formRef = useScrollReveal<HTMLDivElement>({ threshold: 0.08 });
+  const [status, setStatus] = useState("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("submitting");
+    // Simulate network request while user doesn't have a Formspree ID
+    setTimeout(() => {
+      setStatus("success");
+    }, 1500);
+  };
 
   return (
-    <section id="contact" className="py-24 px-6">
-      <div className="max-w-2xl mx-auto text-center">
-        <div ref={headerRef} className="reveal">
-          <p className="text-indigo-500 font-mono text-sm mb-4 tracking-widest uppercase">
-            {sectionNumbers.contact}. What&apos;s Next?
-          </p>
-          <h2 className="text-4xl font-bold text-gray-50 mb-6">Get In Touch</h2>
-          <p className="text-gray-400 leading-relaxed mb-10">
-            I&apos;m currently open to internship opportunities and cool project
-            collaborations. Whether you have a question, an idea, or just want to
-            say hi — my inbox is always open!
-          </p>
-        </div>
+    <section id="contact" className="py-24 px-6 bg-gray-900/30 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+        className="max-w-2xl mx-auto text-center"
+      >
+        <p className="text-indigo-500 font-mono text-sm mb-4 tracking-widest uppercase">
+          04. What&apos;s Next?
+        </p>
+        <h2 className="text-4xl font-bold text-gray-50 mb-6">Get In Touch</h2>
+        <p className="text-gray-400 leading-relaxed mb-10">
+          I&apos;m currently open to internship opportunities and cool project collaborations.
+          Whether you have a question, an idea, or just want to say hi — my inbox is always open!
+        </p>
 
-        {/* Contact form */}
-        <div ref={formRef} className="reveal text-left mb-10">
-          <form
-            action={`mailto:${siteConfig.email}`}
-            method="POST"
-            encType="text/plain"
-            className="space-y-4"
+        {status === "success" ? (
+          <div className="bg-indigo-500/10 border border-indigo-500/50 rounded-lg p-8 mb-14 text-indigo-400">
+            <h3 className="font-bold text-xl mb-2">Message Received!</h3>
+            <p className="text-indigo-300/80">Thanks for reaching out. I&apos;ll get back to you shortly.</p>
+          </div>
+        ) : (
+          <form 
+            onSubmit={handleSubmit}
+            className="max-w-md mx-auto text-left mb-14 space-y-4"
+            // action="https://formspree.io/f/YOUR_FORM_ID"
+            // method="POST"
           >
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="name" className="block text-gray-500 text-xs font-mono mb-1 uppercase tracking-wider">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full bg-gray-900 border border-gray-800 focus:border-indigo-500 outline-none rounded px-4 py-3 text-gray-200 placeholder-gray-600 text-sm transition-colors"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-gray-500 text-xs font-mono mb-1 uppercase tracking-wider">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="w-full bg-gray-900 border border-gray-800 focus:border-indigo-500 outline-none rounded px-4 py-3 text-gray-200 placeholder-gray-600 text-sm transition-colors"
-                />
-              </div>
+            <div>
+              <label htmlFor="name" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Name</label>
+              <input type="text" id="name" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
             </div>
             <div>
-              <label htmlFor="message" className="block text-gray-500 text-xs font-mono mb-1 uppercase tracking-wider">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                placeholder="What's on your mind?"
-                className="w-full bg-gray-900 border border-gray-800 focus:border-indigo-500 outline-none rounded px-4 py-3 text-gray-200 placeholder-gray-600 text-sm transition-colors resize-none"
-              />
+              <label htmlFor="email" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Email</label>
+              <input type="email" id="email" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
             </div>
-            <button
-              type="submit"
-              className="w-full px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-gray-50 rounded text-sm font-medium transition-colors duration-200"
+            <div>
+              <label htmlFor="message" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Message</label>
+              <textarea id="message" rows={4} required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none"></textarea>
+            </div>
+            <button 
+              type="submit" 
+              disabled={status === "submitting"}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-gray-50 rounded font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              Send Message
+              {status === "submitting" ? "Sending..." : "Send Message"}
             </button>
+            <p className="text-gray-600 text-xs text-center mt-3 font-mono">
+              (This triggers a simulated success state)
+            </p>
           </form>
-
-          <p className="text-center text-gray-600 text-xs mt-4">
-            Or email directly:{" "}
-            <a
-              href={`mailto:${siteConfig.email}`}
-              className="text-indigo-500 hover:text-indigo-400 transition-colors"
-            >
-              {siteConfig.email}
-            </a>
-          </p>
-        </div>
+        )}
 
         {/* Social links */}
-        <div className="flex justify-center gap-8 mb-14">
+        <div className="flex justify-center gap-8">
           <a
-            href={siteConfig.github}
+            href="https://github.com/Ethansuttor"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
@@ -101,7 +84,7 @@ export default function Contact() {
             </svg>
           </a>
           <a
-            href={siteConfig.linkedin}
+            href="https://www.linkedin.com/in/ethan-suttor"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
@@ -112,7 +95,7 @@ export default function Contact() {
             </svg>
           </a>
           <a
-            href={`mailto:${siteConfig.email}`}
+            href="mailto:ethan.suttor@louisville.edu"
             aria-label="Email"
             className="text-gray-500 hover:text-gray-50 transition-colors"
           >
@@ -122,10 +105,10 @@ export default function Contact() {
           </a>
         </div>
 
-        <p className="text-gray-600 text-xs font-mono">
-          Designed &amp; Built by {siteConfig.name}
+        <p className="text-gray-600 text-xs font-mono mt-14">
+          Designed & Built by Ethan Suttor
         </p>
-      </div>
+      </motion.div>
     </section>
   );
 }

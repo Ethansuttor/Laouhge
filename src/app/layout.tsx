@@ -1,35 +1,32 @@
 import type { Metadata } from "next";
-import { siteConfig } from "./data/content";
-import ScrollProgressBar from "./components/ScrollProgressBar";
-import BackToTopButton from "./components/BackToTopButton";
 import "./globals.css";
+import CursorGlow from "./components/CursorGlow";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: siteConfig.title,
-  description: siteConfig.description,
-  authors: [{ name: siteConfig.name }],
-  keywords: [
-    "engineering student",
-    "portfolio",
-    "computer engineering",
-    "software engineer",
-    "embedded systems",
-    siteConfig.name,
-  ],
+  title: "Ethan Suttor | Electrical EE Portfolio",
+  description: "Personal portfolio of Ethan Suttor — EE student at the University of Louisville, specializing in digital design, embedded systems, and hardware prototyping.",
   openGraph: {
+    title: "Ethan Suttor | Electrical Engineering",
+    description: "Portfolio of Ethan Suttor, an EE student and hardware prototyper.",
+    url: "https://ethansuttor.com",
+    siteName: "Ethan Suttor Portfolio",
+    images: [
+      {
+        url: "/headshot.jpg",
+        width: 800,
+        height: 800,
+        alt: "Ethan Suttor - Electrical Engineer",
+      },
+    ],
+    locale: "en_US",
     type: "website",
-    url: siteConfig.url,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
+    title: "Ethan Suttor | EE Portfolio",
+    description: "Portfolio of Ethan Suttor, an EE student and hardware prototyper.",
+    images: ["/headshot.jpg"],
   },
-  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -38,11 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased">
-        <ScrollProgressBar />
+    <html lang="en" className="scroll-smooth">
+      <body className="antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+        <CursorGlow />
         {children}
-        <BackToTopButton />
       </body>
     </html>
   );
