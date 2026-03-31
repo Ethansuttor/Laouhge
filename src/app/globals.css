@@ -10,16 +10,77 @@ body {
   color: #f9fafb;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+/* ── Hero entrance animation ─────────────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
+
+.hero-animate > * {
+  animation: fadeSlideUp 0.6s ease forwards;
+  opacity: 0;
 }
-::-webkit-scrollbar-thumb {
-  background: #374151;
-  border-radius: 3px;
+.hero-animate > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-animate > *:nth-child(2) { animation-delay: 0.25s; }
+.hero-animate > *:nth-child(3) { animation-delay: 0.4s; }
+.hero-animate > *:nth-child(4) { animation-delay: 0.55s; }
+.hero-animate > *:nth-child(5) { animation-delay: 0.7s; }
+.hero-animate > *:nth-child(6) { animation-delay: 0.85s; }
+
+/* ── Scroll reveal — fade + slide up ────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Scroll reveal — slide from left (timeline) ─────────── */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal-left.reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Stagger children of a reveal container ─────────────── */
+.reveal-stagger > *:nth-child(1)  { transition-delay: 0ms; }
+.reveal-stagger > *:nth-child(2)  { transition-delay: 80ms; }
+.reveal-stagger > *:nth-child(3)  { transition-delay: 160ms; }
+.reveal-stagger > *:nth-child(4)  { transition-delay: 240ms; }
+.reveal-stagger > *:nth-child(5)  { transition-delay: 320ms; }
+.reveal-stagger > *:nth-child(6)  { transition-delay: 400ms; }
+.reveal-stagger > *:nth-child(7)  { transition-delay: 480ms; }
+.reveal-stagger > *:nth-child(8)  { transition-delay: 560ms; }
+
+/* ── Respect reduced motion ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .hero-animate > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── Mobile tap target minimum size ─────────────────────── */
+@media (max-width: 640px) {
+  nav a,
+  button {
+    min-height: 44px;
+  }
 }
