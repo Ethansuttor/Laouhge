@@ -4,6 +4,7 @@ import CursorGlow from "./components/CursorGlow";
 import OpenToWorkBanner from "./components/OpenToWorkBanner";
 import ScrollProgressBar from "./components/ScrollProgressBar";
 import BackToTopButton from "./components/BackToTopButton";
+import InteractiveBackground from "./components/InteractiveBackground";
 
 export const metadata: Metadata = {
   icons: {
@@ -48,6 +49,7 @@ export default function RootLayout({
         <OpenToWorkBanner />
         <ScrollProgressBar />
         <CursorGlow />
+        <InteractiveBackground />
         {children}
         <BackToTopButton />
       </body>

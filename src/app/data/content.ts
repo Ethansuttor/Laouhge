@@ -124,18 +124,52 @@ export const timeline: TimelineItem[] = [
 ];
 
 // ── Projects ──────────────────────────────────────────────────
+export type CaseStudySection = {
+  heading: string;
+  content: string;
+  image?: string;
+};
+
 export type Project = {
   title: string;
+  slug?: string;
   description: string;
   tags: string[];
   github: string;
   demo: string | null;
+  image?: string;
   featured: boolean;
+  caseStudy?: CaseStudySection[];
 };
 
 export const projects: Project[] = [
   {
+    title: "10-bit Synchronous Up/Down Counter",
+    slug: "10-bit-counter",
+    description: "Designed and implemented entirely in VHDL, deployed on the Basys3 FPGA board. The counter dynamically responds to user input, changing its value between 0 and 1000 based on onboard switches and buttons.",
+    tags: ["VHDL", "FPGA", "Logic Design", "Basys3"],
+    github: "https://github.com/Ethansuttor",
+    demo: "/10-bit%20counter%20project/Suttor%20510-511%20final%20project%20.pdf",
+    image: "/10-bit%20counter%20project/Screenshot%202025-04-23%20000236.png",
+    featured: true,
+    caseStudy: [
+      {
+        heading: "Project Overview",
+        content: "This project involved designing and simulating a 10-bit synchronous up/down counter entirely in VHDL, implementing logic on the Basys3 FPGA platform. The overarching goal was to deepen understanding of sequential logic and state management while managing real physical button inputs (debouncing)."
+      },
+      {
+        heading: "System Architecture",
+        content: "The system reads from onboard Basys3 switches to establish counting bounds (0 to 1000). A primary clock divider module scales down the 100MHz onboard clock for human-readable counting delays, and a debouncer circuit ensures that manual button presses correctly increment or decrement the state without ghost inputs."
+      },
+      {
+        heading: "Challenges & Learnings",
+        content: "Managing clock domains and resolving race conditions during synchronous updates was the primary challenge. Writing testbenches before deploying to the physical board proved crucial in isolating logic errors from hardware mapping issues."
+      }
+    ]
+  },
+  {
     title: "Smart Home Controller",
+    slug: "smart-home-controller",
     description:
       "An ESP32-based IoT system that integrates temperature, motion, and light sensors to automate home appliances. Built a real-time web dashboard with MQTT message brokering and live sensor charts.",
     tags: ["C++", "Arduino", "MQTT", "React", "Node.js"],
@@ -145,6 +179,7 @@ export const projects: Project[] = [
   },
   {
     title: "CPU Simulator",
+    slug: "cpu-simulator",
     description:
       "A simplified 16-bit RISC CPU simulator in Python supporting a custom assembly language, basic I/O, and instruction pipeline visualization.",
     tags: ["Python", "Computer Architecture", "Assembly"],
@@ -154,6 +189,7 @@ export const projects: Project[] = [
   },
   {
     title: "Portfolio Website",
+    slug: "portfolio-website",
     description:
       "This very site — built with Next.js and Tailwind CSS. Dark minimal aesthetic, scroll animations, and a single config file for all content.",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
@@ -162,3 +198,8 @@ export const projects: Project[] = [
     featured: false,
   },
 ];
+
+export const getProjectBySlug = (slug: string) => {
+  return projects.find((p) => p.slug === slug);
+};
+
