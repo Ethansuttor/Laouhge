@@ -27,6 +27,10 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
   useEffect(() => {
     setIsMounted(true);
+    // Configure PDF.js worker for rendering PDFs
+    import("pdfjs-dist").then((pdfjs) => {
+      pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+    });
   }, []);
 
   const handleDownload = (format: "pdf" | "docx") => {
