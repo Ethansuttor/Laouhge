@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-import * as pdfjs from "pdfjs-dist";
 
 // Dynamically import react-pdf to avoid SSR issues
 const Document = dynamic(
@@ -28,8 +27,12 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
   useEffect(() => {
     setIsMounted(true);
-    // This points to the worker file included in the pdfjs-dist package
-    pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+    // Dynamically import and configure PDF.js worker
+    import("pdfjs-dist").then((pdfjs) => {
+      pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+    }).catch((err) => {
+      console.error("Failed to load PDF.js worker:", err);
+    });
   }, []);
 
   const handleDownload = (format: "pdf" | "docx") => {
