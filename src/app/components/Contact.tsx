@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useForm, ValidationError } from "@formspree/react";
 
 const EMAIL = "ethan.suttor@louisville.edu";
 
 export default function Contact() {
-  const [status, setStatus] = useState("");
+  const [state, handleSubmit] = useForm("xjgplybl");
   const [copied, setCopied] = useState(false);
 
   const copyEmail = () => {
@@ -14,15 +15,6 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("submitting");
-    // Simulate network request while user doesn't have a Formspree ID
-    setTimeout(() => {
-      setStatus("success");
-    }, 1500);
   };
 
   return (
@@ -43,40 +35,38 @@ export default function Contact() {
           Whether you have a question, an idea, or just want to say hi — my inbox is always open!
         </p>
 
-        {status === "success" ? (
+        {state.succeeded ? (
           <div className="bg-indigo-500/10 border border-indigo-500/50 rounded-lg p-8 mb-14 text-indigo-400">
             <h3 className="font-bold text-xl mb-2">Message Received!</h3>
             <p className="text-indigo-300/80">Thanks for reaching out. I&apos;ll get back to you shortly.</p>
           </div>
         ) : (
-          <form 
+          <form
             onSubmit={handleSubmit}
             className="max-w-md mx-auto text-left mb-14 space-y-4"
-            // action="https://formspree.io/f/YOUR_FORM_ID"
-            // method="POST"
           >
             <div>
               <label htmlFor="name" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Name</label>
-              <input type="text" id="name" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
+              <input type="text" id="name" name="name" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
+              <ValidationError field="name" errors={state.errors} />
             </div>
             <div>
               <label htmlFor="email" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Email</label>
-              <input type="email" id="email" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
+              <input type="email" id="email" name="email" required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors" />
+              <ValidationError field="email" errors={state.errors} />
             </div>
             <div>
               <label htmlFor="message" className="block text-gray-400 text-sm mb-1 ml-1 font-mono">Message</label>
-              <textarea id="message" rows={4} required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none"></textarea>
+              <textarea id="message" name="message" rows={4} required className="w-full bg-gray-900 border border-gray-800 rounded px-4 py-3 text-gray-50 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none"></textarea>
+              <ValidationError field="message" errors={state.errors} />
             </div>
-            <button 
-              type="submit" 
-              disabled={status === "submitting"}
+            <button
+              type="submit"
+              disabled={state.submitting}
               className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-gray-50 rounded font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              {status === "submitting" ? "Sending..." : "Send Message"}
+              {state.submitting ? "Sending..." : "Send Message"}
             </button>
-            <p className="text-gray-600 text-xs text-center mt-3 font-mono">
-              (This triggers a simulated success state)
-            </p>
           </form>
         )}
 
