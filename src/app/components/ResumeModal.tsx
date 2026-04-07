@@ -28,6 +28,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   useEffect(() => {
     setIsMounted(true);
     // Dynamically import and configure PDF.js worker
+    // @ts-ignore - pdfjs-dist types are incomplete but module works correctly
     import("pdfjs-dist").then((pdfjs) => {
       pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
     }).catch((err) => {
