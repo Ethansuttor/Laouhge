@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Document, Page, pdfjs } from "react-pdf";
+import dynamic from "next/dynamic";
 
-// Set up PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Dynamically import react-pdf to avoid SSR issues
+const Document = dynamic(
+  () => import("react-pdf").then((mod) => mod.Document),
+  { ssr: false }
+);
+
+const Page = dynamic(
+  () => import("react-pdf").then((mod) => mod.Page),
+  { ssr: false }
+);
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -15,6 +23,17 @@ interface ResumeModalProps {
 export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Set up PDF.js worker only on client side
+    if (typeof window !== "undefined") {
+      import("react-pdf").then((pdfjs) => {
+        pdfjs.pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.pdfjs.version}/pdf.worker.min.js`;
+      });
+    }
+  }, []);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -24,6 +43,8 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (!isMounted) return null;
 
   return (
     <AnimatePresence>
@@ -71,7 +92,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               >
                 <Page
                   pageNumber={currentPage}
-                  width={Math.min(800, window.innerWidth - 100)}
+                  width={Math.min(800, typeof window !== "undefined" ? window.innerWidth - 100 : 800)}
                   renderAnnotationLayer={false}
                   renderTextLayer={false}
                 />
