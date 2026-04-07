@@ -36,10 +36,10 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   const handleDownload = (format: "pdf" | "docx") => {
     const link = document.createElement("a");
     if (format === "pdf") {
-      link.href = "/Suttor, Ethan, co-op2.pdf";
+      link.href = "/ethan-suttor-resume.pdf";
       link.download = "Ethan_Suttor_Resume.pdf";
     } else {
-      link.href = "/Suttor, Ethan, co-op(GPA).docx";
+      link.href = "/ethan-suttor-resume.docx";
       link.download = "Ethan_Suttor_Resume.docx";
     }
     document.body.appendChild(link);
@@ -83,7 +83,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
             {/* PDF Viewer */}
             <div className="flex-1 overflow-auto bg-gray-950 flex items-center justify-center">
               <Document
-                file="/Suttor, Ethan, co-op2.pdf"
+                file="/ethan-suttor-resume.pdf"
                 onLoadSuccess={({ numPages }) => setNumPages(numPages)}
                 loading={
                   <div className="text-gray-400 flex items-center gap-2">
