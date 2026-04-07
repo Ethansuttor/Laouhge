@@ -27,18 +27,17 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
   useEffect(() => {
     setIsMounted(true);
-    // Set up PDF.js worker only on client side
-    if (typeof window !== "undefined") {
-      import("react-pdf").then((pdfjs) => {
-        pdfjs.pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.pdfjs.version}/pdf.worker.min.js`;
-      });
-    }
   }, []);
 
-  const handleDownload = () => {
+  const handleDownload = (format: "pdf" | "docx") => {
     const link = document.createElement("a");
-    link.href = "/resume.pdf";
-    link.download = "Ethan_Suttor_Resume.pdf";
+    if (format === "pdf") {
+      link.href = "/resume.pdf";
+      link.download = "Ethan_Suttor_Resume.pdf";
+    } else {
+      link.href = "/Suttor, Ethan, co-op(GPA).docx";
+      link.download = "Ethan_Suttor_Resume.docx";
+    }
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -121,15 +120,26 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                 </button>
               </div>
 
-              <button
-                onClick={handleDownload}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-gray-50 rounded font-medium transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Download
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleDownload("pdf")}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-50 rounded font-medium transition-colors text-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  PDF
+                </button>
+                <button
+                  onClick={() => handleDownload("docx")}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-gray-50 rounded font-medium transition-colors text-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Word
+                </button>
+              </div>
             </div>
           </motion.div>
         </motion.div>
