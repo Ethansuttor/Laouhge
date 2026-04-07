@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-import * as pdfjsLib from "pdfjs-dist";
 
 // Dynamically import react-pdf to avoid SSR issues
 const Document = dynamic(
@@ -29,7 +28,9 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   useEffect(() => {
     setIsMounted(true);
     // Configure PDF.js worker for rendering PDFs
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    import("pdfjs-dist").then((pdfjs) => {
+      pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+    });
   }, []);
 
   const handleDownload = (format: "pdf" | "docx") => {
